@@ -11,7 +11,8 @@ app.use(express.json());
 require("dotenv").config();
 
 const authorRouter = require('./routes/AuthorRoutes/author.js')
-//const inventoryRouter = require('./Routes/inventoryRoutes')
+const articleRouter = require('./routes/ArticleRoutes/articleRoutes.js')
+const approvalRouter = require('./routes/ArticleRoutes/approvalRoutes.js')
 
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -19,7 +20,8 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 //Routes
 app.use("/api/author", authorRouter)
-//app.use("/api/inventory", inventoryRouter)
+app.use("/api/articles", articleRouter)
+app.use("/api/approval", approvalRouter)
 
 
 mongoose
