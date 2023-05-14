@@ -50,6 +50,32 @@ app.get('/retrieveForums', async (req, res) => {
 
 
 
+//Updating the Articles
+app.put('/updateForum', async (req, res) => {
+    try {
+
+
+        findRecord = await Forum.findOne({ questionID: req.body.questionID })
+        if(findRecord){
+            const updatedForum = await Forum.findByIdAndUpdate(
+                findRecord._id,
+                {
+                    question: req.body.question,
+                    questionID: req.body.questionID,
+                    userID: req.body.userID,
+                    answer: req.body.answer
+                },
+            );
+            res.json(updatedForum);    
+        }else {
+            res.send("No Such Record Found")
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating Forum');
+    }
+});
+
 
 //Deleting the Articles
 app.delete('/deleteForum/:questionId', async (req, res) => {
