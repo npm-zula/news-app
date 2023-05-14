@@ -52,6 +52,37 @@ app.get('/retrieveArticles', async (req, res) => {
 });
 
 
+//Updating the Articles
+app.put('/editArticle', async (req, res) => {
+    try {
+
+        findRecord = await Approval.findOne({ articleID: req.body.articleID })
+        if(findRecord){
+            const updatedArticle = await Approval.findByIdAndUpdate(
+                findRecord._id,
+                {
+                    articleID: req.body.articleID,
+                    title: req.body.title,
+                    body: req.body.body,
+                    published: req.body.published,
+                    tags: req.body.tags,
+                    authorUserName: req.body.authorUserName
+                }
+            );
+            res.json(updatedArticle);
+        }
+        else{
+            res.status(404).send("No Such Article Found")
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating Comment');
+    }
+});
+
+
+
 
 
 
@@ -60,7 +91,6 @@ app.delete('/deleteArticle/:articleId', async (req, res) => {
     try {
         findRecord = await Approval.findOne({ articleID: req.params.articleId })
         if(findRecord){
-            console.log("Han Bhaii ?")
             const removedRecord = await Approval.findByIdAndRemove(findRecord._id);
             res.json(removedRecord);
         }
