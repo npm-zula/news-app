@@ -53,6 +53,37 @@ app.get('/retrieveArticle', async (req, res) => {
 });
 
 
+
+
+
+
+//Retrieveing all the Articles from the Database
+app.get('/retrieveUserArticles/:authorID', async (req, res) => {
+    try {
+        const articles = await Article.findAll({authorID: req.params.authorID});
+        res.json(
+            articles.map((article) => ({
+                articleID: article.articleID,
+                title: article.title,
+                body: article.body,
+                published: article.published,
+                tags: article.tags,
+                authorUserName: article.authorUserName
+            }))
+        );
+    } catch (error) {
+        console.error(error);s
+        res.status(500).send('Error retrieving articles');
+    }
+});
+
+
+
+
+
+
+
+
 //editing information of the Article other than IDs etc
 app.put('/editArticle', async (req, res) => {
     try {
