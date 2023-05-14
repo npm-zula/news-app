@@ -13,6 +13,7 @@ require("dotenv").config();
 const authorRouter = require('./routes/AuthorRoutes/author.js')
 const articleRouter = require('./routes/ArticleRoutes/articleRoutes.js')
 const approvalRouter = require('./routes/ArticleRoutes/approvalRoutes.js')
+const forumRouter = require('./routes/ForumRoutes/forumRoutes.js')
 
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -22,6 +23,8 @@ const MONGODB_URI = process.env.MONGODB_URI;
 app.use("/api/author", authorRouter)
 app.use("/api/articles", articleRouter)
 app.use("/api/approval", approvalRouter)
+app.use("/api/forum", forumRouter)
+
 
 
 mongoose
