@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json())
 
 
-//Creating a New Article to the Database
+//Creating a New Forum to the Database
 app.post('/createForum', async (req, res) => {
     const newForum = new Forum({
         question: req.body.question,
@@ -29,23 +29,21 @@ app.post('/createForum', async (req, res) => {
 });
 
 
-//Retrieveing all the Articles from the Database
-app.get('/retrieveArticles', async (req, res) => {
+//Retrieveing all the Forums from the Database
+app.get('/retrieveForums', async (req, res) => {
     try {
-        const articles = await Forum.find({});
+        const forums = await Forum.find({});
         res.json(
-            articles.map((article) => ({
-                articleID: article.articleID,
-                title: article.title,
-                body: article.body,
-                published: article.published,
-                tags: article.tags,
-                authorUserName: article.authorUserName
+            forums.map((forum) => ({
+                question: forum.question,
+                questionID: forum.questionID,
+                userID: forum.userID,
+                answer: forum.answer
             }))
         );
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error retrieving articles');
+        res.status(500).send('Error retrieving forums');
     }
 });
 
@@ -54,19 +52,19 @@ app.get('/retrieveArticles', async (req, res) => {
 
 
 //Deleting the Articles
-app.delete('/deleteArticle/:articleId', async (req, res) => {
+app.delete('/deleteForum/:questionId', async (req, res) => {
     try {
-        findRecord = await Forum.findOne({ articleID: req.params.articleId })
+        findRecord = await Forum.findOne({ questionID: req.params.questionId })
         if(findRecord){
             const removedRecord = await Forum.findByIdAndRemove(findRecord._id);
             res.json(removedRecord);
         }
         else{
-            res.status(404).send("Article Not Found")
+            res.status(404).send("Forum Not Found")
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error deleting article');
+        res.status(500).send('Error deleting Forum');
     }
 });
 
