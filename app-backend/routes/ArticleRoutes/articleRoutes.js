@@ -47,7 +47,7 @@ app.get('/retrieveArticle', async (req, res) => {
             }))
         );
     } catch (error) {
-        console.error(error);
+        console.error(error);s
         res.status(500).send('Error retrieving articles');
     }
 });
