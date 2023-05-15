@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 require('dotenv').config()
-const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const Article = require('../../models/ArticleModel/articleSchema')
 
@@ -57,6 +56,7 @@ app.get('/retrieveArticle', async (req, res) => {
 
 
 
+
 //Retrieveing all the Articles from the Database
 app.get('/retrieveUserArticles/:authorID', async (req, res) => {
     try {
@@ -74,6 +74,34 @@ app.get('/retrieveUserArticles/:authorID', async (req, res) => {
     } catch (error) {
         console.error(error);s
         res.status(500).send('Error retrieving articles');
+
+
+//Updating the Articles
+app.put('/editArticle', async (req, res) => {
+    try {
+
+        findRecord = await Article.findOne({ articleID: req.body.articleID })
+        if(findRecord){
+            const updatedArticle = await Article.findByIdAndUpdate(
+                findRecord._id,
+                {
+                    articleID: req.body.articleID,
+                    title: req.body.title,
+                    body: req.body.body,
+                    published: req.body.published,
+                    tags: req.body.tags,
+                    authorUserName: req.body.authorUserName
+                }
+            );
+            res.json(updatedArticle);
+        }
+        else{
+            res.status(404).send("No Such Article Found")
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating Comment');
     }
 });
 
