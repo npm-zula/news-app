@@ -12,6 +12,8 @@ require("dotenv").config();
 
 const authorRouter = require('./routes/AuthorRoutes/author.js')
 const articleRouter = require('./routes/ArticleRoutes/articleRoutes.js')
+const approvalRouter = require('./routes/ArticleRoutes/approvalRoutes.js')
+const forumRouter = require('./routes/ForumRoutes/forumRoutes.js')
 const commentRouter = require('./routes/ArticleRoutes/commentRoutes.js')
 
 const PORT = process.env.PORT || 3000;
@@ -21,6 +23,8 @@ const MONGODB_URI = process.env.MONGODB_URI;
 //Routes
 app.use("/api/author", authorRouter)
 app.use("/api/articles", articleRouter)
+app.use("/api/approval", approvalRouter)
+app.use("/api/forum", forumRouter)
 app.use("/api/comments", commentRouter)
 
 
