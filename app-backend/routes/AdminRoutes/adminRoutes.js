@@ -1,13 +1,6 @@
-const express = require('express')
-const app = express()
-require('dotenv').config()
-const mongoose = require('mongoose')
-const bodyParser = require('body-parser')
-const User = require('../../models/AdminModel/userSchema')
-const { find } = require('../../models/AuthorModel/authorSchema')
-
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(express.json())
+const express = require("express");
+const app = express();
+const User = require("../../models/AdminModel/userSchema");
 
 app.post("/users", async (req, res) => {
   try {
@@ -65,7 +58,4 @@ app.delete("/users/:id", async (req, res) => {
   }
 });
 
-
-
-
-module.exports = app
+module.exports = app;

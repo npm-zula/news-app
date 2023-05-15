@@ -1,13 +1,8 @@
 const express = require("express");
-const router = express.Router();
+const app = express();
+const User = require("../../models/AdminModel/userSchema");
 
-const User = require("../../models/UserModel/userSchema");
-const {
-  authenticate,
-  authorize,
-} = require("../../middleware/authenticate_mid");
-
-router.post("/users", async (req, res) => {
+app.post("/users", async (req, res) => {
   try {
     const newUser = await User.create(req.body);
     res.status(201).json(newUser);
@@ -16,7 +11,7 @@ router.post("/users", async (req, res) => {
   }
 });
 
-router.get("/users", async (req, res) => {
+app.get("/users", async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -25,7 +20,7 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.get("/users/:id", async (req, res) => {
+app.get("/users/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -37,7 +32,7 @@ router.get("/users/:id", async (req, res) => {
   }
 });
 
-router.put("/users/:id", async (req, res) => {
+app.put("/users/:id", async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -51,7 +46,7 @@ router.put("/users/:id", async (req, res) => {
   }
 });
 
-router.delete("/users/:id", async (req, res) => {
+app.delete("/users/:id", async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
@@ -63,4 +58,4 @@ router.delete("/users/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = app;
