@@ -3,7 +3,7 @@ const app = express()
 require('dotenv').config()
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const Approval = require('../../models/ArticleModel/approvalSchema')
+const User = require('../../models/AdminModel/userSchema')
 const { find } = require('../../models/AuthorModel/authorSchema')
 
 app.use(bodyParser.urlencoded({extended: false}))
@@ -64,3 +64,8 @@ app.delete("/users/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to delete the user" });
   }
 });
+
+
+
+
+module.exports = app

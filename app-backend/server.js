@@ -26,7 +26,7 @@ app.use("/api/author", authorRouter)
 app.use("/api/articles", articleRouter)
 app.use("/api/approval", approvalRouter)
 app.use("/api/comments", commentRouter)
-app.use("/api/comments", forumRouter)
+app.use("/api/forum", forumRouter)
 app.use("/api/Admin", adminRouter)
 
 

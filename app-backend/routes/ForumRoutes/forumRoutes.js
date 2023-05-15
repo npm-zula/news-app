@@ -48,8 +48,6 @@ app.get('/retrieveForums', async (req, res) => {
 });
 
 
-
-
 //Editing the forum
 app.put('/updateForum', async (req, res) => {
     try {
