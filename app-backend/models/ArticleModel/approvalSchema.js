@@ -12,4 +12,4 @@ const approvalSchema = new Schema({
 })
 
 
-module.exports = mongoose.model('Approval', approvalSchema);
+module.exports = mongoose.model('Approval', approvalSchema)

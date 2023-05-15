@@ -18,6 +18,12 @@ const UserRouter = require("./routes/UserRoutes/userRoutes.js");
 const WeatherRouter = require("./routes/weatherRoutes/weatherRoute.js");
 const adminROuter = require("./routes/adminRoutes/adminRoutes.js");
 
+const authorRouter = require("./routes/AuthorRoutes/author.js");
+const articleRouter = require("./routes/ArticleRoutes/articleRoutes.js");
+const approvalRouter = require("./routes/ArticleRoutes/approvalRoutes.js");
+const commentRouter = require("./routes/ArticleRoutes/commentRoutes.js");
+const forumRouter = require("./routes/ForumRoutes/forumRoutes.js");
+
 const PORT = 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -36,6 +42,8 @@ app.use("/api/subscription", SubscriptionRouter);
 app.use("/api/weather", WeatherRouter);
 
 app.use("/api/admin", adminROuter);
+app.use("/api/comments", commentRouter);
+app.use("/api/forum", forumRouter);
 
 mongoose
   .connect(MONGODB_URI, {
