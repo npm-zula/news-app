@@ -1,16 +1,30 @@
 const express = require("express");
 const router = express.Router();
-const Subscription = require("../models/subSchema");
+const Subscription = require("../../models/SubscriptionModel/subSchema");
+const User = require("../../models/UserModel/userSchema");
 
+// GET /subscriptions
+router.get("/subs", async (req, res) => {
+  try {
+    const subscriptions = await Subscription.find();
+    res.json(subscriptions);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve subscriptions" });
+  }
+});
+
+//tested with postman
 // POST /subscriptions
-router.post("/subscriptions", async (req, res) => {
-  const { user, plan, endDate } = req.body;
+router.post("/post", async (req, res) => {
+  const { username, plan, endMonth } = req.body;
 
   try {
+    const user = await User.findOne({ username: username });
+
     const subscription = await Subscription.create({
       user,
       plan,
-      endDate,
+      endMonth,
     });
     res.status(201).json(subscription);
   } catch (err) {
@@ -19,7 +33,7 @@ router.post("/subscriptions", async (req, res) => {
 });
 
 // GET /subscriptions/:id
-router.get("/subscriptions/:id", async (req, res) => {
+router.get("/subs/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -35,14 +49,14 @@ router.get("/subscriptions/:id", async (req, res) => {
 });
 
 // PUT /subscriptions/:id
-router.put("/subscriptions/:id", async (req, res) => {
+router.put("/subs/:id", async (req, res) => {
   const { id } = req.params;
-  const { plan, endDate } = req.body;
+  const { plan, endMonth } = req.body;
 
   try {
     const subscription = await Subscription.findByIdAndUpdate(
       id,
-      { plan, endDate },
+      { plan, endMonth },
       { new: true }
     );
     if (!subscription) {
@@ -56,7 +70,7 @@ router.put("/subscriptions/:id", async (req, res) => {
 });
 
 // DELETE /subscriptions/:id
-router.delete("/subscriptions/:id", async (req, res) => {
+router.delete("/subs/:id", async (req, res) => {
   const { id } = req.params;
 
   try {

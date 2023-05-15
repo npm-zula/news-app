@@ -8,6 +8,7 @@ const subscriptionSchema = new mongoose.Schema({
   },
   plan: {
     type: String,
+    enum: ["basic", "advanced", "premium"],
     required: true,
   },
   startDate: {
@@ -15,8 +16,8 @@ const subscriptionSchema = new mongoose.Schema({
     required: true,
     default: Date.now,
   },
-  endDate: {
-    type: Date,
+  endMonth: {
+    type: String,
     required: true,
   },
 });

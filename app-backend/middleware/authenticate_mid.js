@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("../models/UserModel/userSchema");
 
 const authorize = (roles) => async (req, res, next) => {
   try {
@@ -10,7 +10,7 @@ const authorize = (roles) => async (req, res, next) => {
     if (!token) throw new Error("Unauthorized access");
 
     // Verify and decode token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const userfound = await User.findById(decoded.id);
 
     if (!userfound) throw new Error("User not found");
@@ -26,7 +26,7 @@ function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).send("Unauthorized");
   const token = authHeader.split(" ")[1];
-  jwt.verify(token, secretKey, (err, payload) => {
+  jwt.verify(token, process.env.SECRET_KEY, (err, payload) => {
     if (err) return res.status(401).send("Unauthorized");
     req.user = { id: payload.id, role: payload.role };
     next();
