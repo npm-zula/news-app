@@ -38,11 +38,12 @@ app.get('/retrieveArticle', async (req, res) => {
         const articles = await Article.find({});
         res.json(
             articles.map((article) => ({
+                articleID: article.articleID,
                 title: article.title,
                 body: article.body,
-                author: article.author,
-                published: false,
-                tags: article.tags
+                published: article.published,
+                tags: article.tags,
+                authorUserName: article.authorUserName
             }))
         );
     } catch (error) {
@@ -53,23 +54,31 @@ app.get('/retrieveArticle', async (req, res) => {
 
 
 //Updating the Articles
-app.put('/updateArticle/:articleId', async (req, res) => {
+app.put('/editArticle', async (req, res) => {
     try {
-        const updatedArticle = await Article.findByIdAndUpdate(
-            req.params.articleId,
-            {
-                title: req.body.title,
-                body: req.body.body,
-                author: req.body.author,
-                published: true,
-                tags: req.body.tags
-            },
-            { new: true }
-        );
-        res.json(updatedArticle);
+
+        findRecord = await Article.findOne({ articleID: req.body.articleID })
+        if(findRecord){
+            const updatedArticle = await Article.findByIdAndUpdate(
+                findRecord._id,
+                {
+                    articleID: req.body.articleID,
+                    title: req.body.title,
+                    body: req.body.body,
+                    published: req.body.published,
+                    tags: req.body.tags,
+                    authorUserName: req.body.authorUserName
+                }
+            );
+            res.json(updatedArticle);
+        }
+        else{
+            res.status(404).send("No Such Article Found")
+        }
+
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error updating article');
+        res.status(500).send('Error updating Comment');
     }
 });
 
@@ -77,13 +86,20 @@ app.put('/updateArticle/:articleId', async (req, res) => {
 //Deleting the Articles
 app.delete('/deleteArticle/:articleId', async (req, res) => {
     try {
-        const removedRecord = await Article.findByIdAndRemove(req.params.articleId);
-        res.json(removedRecord);
+        findRecord = await Article.findOne({ articleID: req.params.articleId })
+        if(findRecord){
+            const removedRecord = await Article.findByIdAndRemove(findRecord._id);
+            res.json(removedRecord);
+        }
+        else{
+            res.status(404).send("Article Not Found")
+        }
     } catch (error) {
         console.error(error);
         res.status(500).send('Error deleting article');
     }
 });
+
 
 
 
