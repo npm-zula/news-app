@@ -30,7 +30,7 @@ app.post("/signup", async (req, res) => {
 // Login Route
 app.post("/login", async (req, res) => {
   const author = await Author.findOne({
-    username: req.body.username,
+    email: req.body.email,
     password: req.body.password
   })
     .then((obj) => {
