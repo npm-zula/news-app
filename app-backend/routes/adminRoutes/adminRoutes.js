@@ -1,8 +1,12 @@
 const express = require("express");
 const app = express();
 const User = require("../../models/AdminModel/userSchema");
+const {
+  authenticate,
+  authorize,
+} = require("../../middleware/authenticate_mid");
 
-app.post("/users", async (req, res) => {
+app.post("/users", authorize(["admin"]), async (req, res) => {
   try {
     const newUser = await User.create(req.body);
     res.status(201).json(newUser);
@@ -11,7 +15,7 @@ app.post("/users", async (req, res) => {
   }
 });
 
-app.get("/users", async (req, res) => {
+app.get("/users", authorize(["admin"]), async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -20,7 +24,7 @@ app.get("/users", async (req, res) => {
   }
 });
 
-app.get("/users/:id", async (req, res) => {
+app.get("/users/:id", authorize(["admin"]), async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -32,7 +36,7 @@ app.get("/users/:id", async (req, res) => {
   }
 });
 
-app.put("/users/:id", async (req, res) => {
+app.put("/users/:id", authorize(["admin"]), async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -46,7 +50,7 @@ app.put("/users/:id", async (req, res) => {
   }
 });
 
-app.delete("/users/:id", async (req, res) => {
+app.delete("/users/:id", authorize(["admin"]), async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
