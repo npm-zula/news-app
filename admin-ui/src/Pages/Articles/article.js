@@ -1,7 +1,7 @@
 import { Avatar, Button, Rate, Space, Table, Typography } from "antd";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { getInventory, getOrders } from "../../API";
-
 
 function ArticlesApproval() {
   const [loading, setLoading] = useState(false);
@@ -31,14 +31,18 @@ function ArticlesApproval() {
   };
 
   return (
-    <Space size={20} direction="vertical">
-      <Typography.Title level={4}>Articles</Typography.Title>
+    <Space size={20} direction="vertical" style={{ backgroundColor: "#f7f7f7", padding: "20px" }}>
+      <Typography.Title level={4} style={{ color: "#1890ff" }}>
+        Articles
+      </Typography.Title>
       <Table
         loading={loading}
         columns={[
           {
             title: "ID",
             dataIndex: "id",
+            width: 80,
+            align: "center",
           },
           {
             title: "Title",
@@ -47,10 +51,17 @@ function ArticlesApproval() {
           {
             title: "Body",
             dataIndex: "description",
+            width: 400,
           },
           {
             title: "Author",
             dataIndex: "brand",
+            render: (author) => (
+              <Space>
+                <Avatar>{author.charAt(0)}</Avatar>
+                <span>{author}</span>
+              </Space>
+            ),
           },
           {
             title: "Actions",
@@ -60,23 +71,31 @@ function ArticlesApproval() {
                 {record.status !== "approved" && (
                   <Button
                     type="primary"
+                    icon={<CheckOutlined />}
                     onClick={() => handleApprove(record.id)}
+                    style={{ backgroundColor: "#52c41a", borderColor: "#52c41a" }}
                   >
                     Approve
                   </Button>
                 )}
-                <Button onClick={() => handleDisapprove(record.id)}>
+                <Button
+                  icon={<CloseOutlined />}
+                  onClick={() => handleDisapprove(record.id)}
+                  style={{ backgroundColor: "#f5222d", borderColor: "#f5222d", color: "#fff" }}
+                >
                   Disapprove
                 </Button>
               </Space>
             ),
+            width: 180,
           },
         ]}
         dataSource={dataSource}
         pagination={{
           pageSize: 5,
         }}
-      ></Table>
+        bordered
+      />
     </Space>
   );
 }

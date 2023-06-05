@@ -248,8 +248,8 @@ function Forums() {
                                 )
                               }
                               style={{
-                                backgroundColor: "red",
-                                color: "white",
+                                backgroundColor: "#ff4d4f",
+                                color: "#fff",
                                 marginLeft: 8,
                               }}
                             >
@@ -296,7 +296,10 @@ function Forums() {
                             onClick={() =>
                               handleDeleteQuestion(record.id, questionId)
                             }
-                            style={{ backgroundColor: "red", color: "white" }}
+                            style={{
+                              backgroundColor: "#ff4d4f",
+                              color: "#fff",
+                            }}
                           >
                             Delete
                           </Button>
@@ -319,6 +322,12 @@ function Forums() {
         dataSource={dataSource}
         pagination={{
           pageSize: 5,
+        }}
+        style={{
+          backgroundColor: "#fff",
+          borderRadius: 8,
+          padding: 16,
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
         }}
       />
     </Space>
