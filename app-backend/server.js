@@ -22,7 +22,7 @@ const approvalRouter = require("./routes/ArticleRoutes/approvalRoutes.js");
 const forumRouter = require("./routes/ForumRoutes/forumRoutes.js");
 const commentRouter = require("./routes/ArticleRoutes/commentRoutes.js");
 
-const PORT = 3000;
+const PORT = 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 app.use(bodyParser.urlencoded({ extended: true }));
