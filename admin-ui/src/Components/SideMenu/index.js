@@ -3,6 +3,7 @@ import {
   CommentOutlined,
   BookFilled,
   UserOutlined,
+  FormOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useEffect, useState } from "react";
@@ -50,6 +51,13 @@ function SideMenu() {
             key: "/users",
             icon: <UserOutlined />,
           },
+
+          {
+            label: "Forums",
+            key: "/forums",
+            icon: <FormOutlined />,
+          },
+          
           
         ]}
       ></Menu>
