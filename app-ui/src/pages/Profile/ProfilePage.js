@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import {
   Tabs,
@@ -7,12 +7,51 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
 import ProfileSection from "../../components/ProfileSection";
 import SubscriptionSection from "../../components/SubscriptionSection";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("profile");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Add your token verification logic here
+    const token = getTokenFromCookie();
+    if (!verifyToken(token)) {
+      // If the token is not verified, redirect to the login page
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const verifyToken = (token) => {
+    // Implement your token verification logic here
+    // Return true if the token is verified, false otherwise
+    // You can use a library like jsonwebtoken for token verification
+
+    // Example verification logic (replace with your actual logic)
+    if (token) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getTokenFromCookie = () => {
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+
+      if (cookie.startsWith("token=")) {
+        return cookie.substring("token=".length, cookie.length);
+      }
+    }
+
+    return null;
+  };
 
   //   const handleTabChange = () => {
   //     setActiveTab(activeTab === "profile" ? "subscription" : "profile");
