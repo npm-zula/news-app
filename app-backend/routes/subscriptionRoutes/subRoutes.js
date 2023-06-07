@@ -17,9 +17,31 @@ router.get("/subs", authorize(["admin", "super admin"]), async (req, res) => {
   }
 });
 
+// //tested with postman
+// // POST /subscriptions
+// router.post(
+//   "/post",
+//   authorize(["admin", "super admin"]),
+//   async (req, res) => {
+//     const { username, plan, endMonth } = req.body;
+
+//     try {
+//       const user = await User.findOne({ username: username });
+
+//       const subscription = await Subscription.create({
+//         user,
+//         plan,
+//         endMonth,
+//       });
+//       res.status(201).json(subscription);
+//     } catch (err) {
+//       res.status(500).json({ error: "Failed to create subscription" });
+//     }
+//   }
+// );
 //tested with postman
 // POST /subscriptions
-router.post("/post", authorize(["admin", "super admin"]), async (req, res) => {
+router.post("/post", async (req, res) => {
   const { username, plan, endMonth } = req.body;
 
   try {
@@ -45,6 +67,25 @@ router.get(
 
     try {
       const subscription = await Subscription.findById(id);
+      if (!subscription) {
+        res.status(404).json({ error: "Subscription not found" });
+      } else {
+        res.json(subscription);
+      }
+    } catch (err) {
+      res.status(500).json({ error: "Failed to retrieve subscription" });
+    }
+  }
+);
+// GET /subscriptions/:username
+router.get(
+  "/subs/:username",
+  authorize(["admin", "super admin"]),
+  async (req, res) => {
+    const { username } = req.params;
+
+    try {
+      const subscription = await Subscription.find({ username: username });
       if (!subscription) {
         res.status(404).json({ error: "Subscription not found" });
       } else {

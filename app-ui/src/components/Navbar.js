@@ -4,11 +4,15 @@ import { Link } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
 
 const Navbar = () => {
+  const handleLogout = () => {
+    // Clear the browser's cookies or perform any logout logic here
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    // Additional logout logic...
+  };
   return (
     <div>
       <nav className="flex flex-col md:flex-row items-center justify-between p-4 bg-white text-accent_primary">
         <div className="flex items-center">
-          {/* <img src={logo} alt="Logo" className="w-full h-20 mr-2" /> */}
           <div className="font-bold text-2xl ml-8 hover:text-accent_secondary cursor-pointer">
             Lahore-Link
           </div>
@@ -40,13 +44,16 @@ const Navbar = () => {
           <Link to="/profile" className="py-2 px-4 mx-4">
             <img src={icon} alt="Profile" className="h-8 w-8 rounded-full" />
           </Link>
-          <button className="px-4 mr-4 bg-gray-100 rounded text-accent_primary font-bold">
-            Logout
+          <button
+            className="px-4 p-1.5 mr-4 bg-gray-100 rounded text-accent_primary font-bold"
+            onClick={handleLogout}
+          >
+            <Link to="/login">Logout</Link>
           </button>
         </div>
       </nav>
       <nav className="flex justify-center  bg-gray-200 text-accent_primary text-xl font-semibold py-4">
-        <Link to="/" className="px-4 mx-4 hover:text-accent_secondary">
+        <Link to="/news" className="px-4 mx-4 hover:text-accent_secondary">
           Home
         </Link>
         <Link to="/about" className="px-4 mx-4 hover:text-accent_secondary">

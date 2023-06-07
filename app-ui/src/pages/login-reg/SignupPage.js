@@ -186,7 +186,7 @@ const SignupPage = () => {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Already a Member?{" "}
+            Already a Member?
             <a
               href="/login"
               className="font-semibold leading-6 text-accent_primary hover:text-accent_secondary"

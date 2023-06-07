@@ -11,6 +11,7 @@ module.exports = {
       },
       backgroundImage: {
         "news-bg": "url('./imgs/backgroundOne.jpg')",
+        "profile-bg": "url('./imgs/backgroundTwo.jpg')",
       },
     },
   },
