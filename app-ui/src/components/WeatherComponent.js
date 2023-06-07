@@ -89,7 +89,7 @@ const WeatherComponent = () => {
             <div class="flex flex-col items-center">
               <div class="font-medium text-sm">Wind</div>
               <div class="text-sm text-gray-500">
-                {weatherData.Windspeed}k/h
+                {weatherData.WindSpeed}k/h
               </div>
             </div>
             <div class="flex flex-col items-center">

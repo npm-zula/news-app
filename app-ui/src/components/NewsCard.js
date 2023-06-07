@@ -1,7 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import picture from "../imgs/profile.png";
 
-const NewsCard = () => {
+const NewsCard = (props) => {
+  const [name, setName] = useState("Erling Aashir");
+  const [title, setTitle] = useState("Can coffee make you a better developer?");
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async (token) => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/articles/retrieveArticle",
+        {
+          method: "GET",
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        // Handle the user data
+        setName(data[0].authorUserName);
+        setTitle(data[0].title);
+      } else {
+        throw new Error("Failed to fetch user profile");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+
   return (
     <div>
       <div class="">
@@ -18,7 +47,7 @@ const NewsCard = () => {
               Featured Article
             </p>
             <div class="text-accent_primary font-black text-3xl mb-2">
-              Can coffee make you a better developer?
+              {title}
             </div>
             <p class="text-gray-700 text-normal">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -36,7 +65,7 @@ const NewsCard = () => {
               alt="Avatar of Jonathan Reinink"
             />
             <div class="text-xl">
-              <p class="text-gray-900 leading-none">Jonathan Reinink</p>
+              <p class="text-gray-900 leading-none">{name}</p>
               <p class="text-gray-600">Aug 18</p>
             </div>
           </div>

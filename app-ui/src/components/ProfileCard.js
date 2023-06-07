@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import picture from "../imgs/profile.png";
 
 const ProfileCard = (props) => {
