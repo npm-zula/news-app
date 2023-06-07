@@ -53,10 +53,6 @@ const ProfilePage = () => {
     return null;
   };
 
-  //   const handleTabChange = () => {
-  //     setActiveTab(activeTab === "profile" ? "subscription" : "profile");
-  //   };
-
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
