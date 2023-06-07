@@ -1,7 +1,6 @@
 import React from "react";
 import icon from "../imgs/profile.png";
 import { Link } from "react-router-dom";
-import { FiBell } from "react-icons/fi";
 import NotificationIcon from "./NotificationIcon";
 
 const Navbar = () => {

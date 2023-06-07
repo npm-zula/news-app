@@ -55,7 +55,7 @@ const NewsCard = (props) => {
               exercitationem praesentium nihil. Lorem ipsum dolor sit amet,
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
               Voluptatibus quia, nulla! Maiores et perferendis eaque,
-              exercitationem praesentium nihil. Lorem ipsum dolor sit amet,
+              exercitationem praesentium nihil. Lorem ipsum dolor sit amet.
             </p>
           </div>
           <div class="flex items-center mt-10">

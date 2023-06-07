@@ -87,7 +87,7 @@ const NotificationIcon = () => {
   return (
     <div>
       <button
-        className="flex items-center h-10 px-5 font-bold transition-colors duration-150 text-accent_primary rounded-lg focus:shadow-outline"
+        className="flex items-center h-10 font-bold transition-colors duration-150 text-accent_primary rounded-lg focus:shadow-outline"
         onClick={openModal}
       >
         <span className="mr-2">

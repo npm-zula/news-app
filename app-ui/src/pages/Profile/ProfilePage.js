@@ -80,12 +80,18 @@ const ProfilePage = () => {
       <Navbar />
       <div className=" bg-white min-h-screen mx-72">
         <Tabs id="custom-animation" value={activeTab} className="pt-10 pb-2">
-          <TabsHeader className="border-b">
+          <TabsHeader
+            className="rounded-none border-b border-blue-gray-50 bg-transparent p-0"
+            indicatorProps={{
+              className:
+                "bg-transparent border-b-2 border-slate-700 shadow-none rounded-none",
+            }}
+          >
             <Tab
               onClick={() => handleTabChange("profile")}
               key="profile"
               value="profile"
-              className={`text-2xl ${
+              className={`text-2xl z-10 ${
                 activeTab === "profile" ? "font-black" : ""
               }`}
             >
