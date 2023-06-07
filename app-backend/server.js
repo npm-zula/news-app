@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 3001;
 var mongoose = require("mongoose");
 const cors = require("cors");
 app.use(cors());
@@ -16,7 +16,7 @@ const commentRouter = require("./routes/ArticleRoutes/commentRoutes.js");
 const forumRouter = require("./routes/ForumRoutes/forumRoutes.js");
 const adminRouter = require("./routes/AdminRoutes/adminRoutes.js");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 //Routes

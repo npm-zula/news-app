@@ -49,6 +49,25 @@ app.get('/retrieveComments', async (req, res) => {
 });
 
 
+app.get('/retrieveArticleComments/:id', async (req, res) => {
+    try {
+        const comments = await Comment.find({articleID: req.params.id});
+        res.json(
+            comments.map((comment) => ({
+                articleID: comment.articleID,
+                userName: comment.userName,
+                commentID: comment.commentID,
+                body: comment.body 
+            }))
+        );
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error retrieving articles');
+    }
+});
+
+
+
 //Updating the Articles
 app.put('/editComment', async (req, res) => {
     try {

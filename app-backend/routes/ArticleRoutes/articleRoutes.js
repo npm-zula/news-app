@@ -11,6 +11,9 @@ app.use(express.json())
 
 //An Article approved by admin will be added in the article collection and will be removed from the approval collection
 app.post('/approveArticle', async (req, res) => {
+
+    // console.log(req.body.articleID, " Article id ")
+
     const newArticle = new Article({
         articleID: req.body.articleID,
         title: req.body.title,
@@ -21,7 +24,11 @@ app.post('/approveArticle', async (req, res) => {
     });
 
     try {
+        // console.log(newArticle, "This is new artiv")
+
         const savedArticle = await newArticle.save();
+        
+        // console.log(savedArticle)
         res.status(201).json(savedArticle);
     } catch (error) {
         console.error(error);
@@ -74,7 +81,7 @@ app.get('/retrieveUserArticles/:authorID', async (req, res) => {
     } catch (error) {
         console.error(error);s
         res.status(500).send('Error retrieving articles');
-
+    }});
 
 //Updating the Articles
 app.put('/editArticle', async (req, res) => {
@@ -163,4 +170,4 @@ app.delete('/deleteArticle/:articleId', async (req, res) => {
 
 
 
-module.exports = app
+module.exports = app;

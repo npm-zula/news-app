@@ -27,6 +27,35 @@ app.get("/users", async (req, res) => {
   }
 });
 
+
+app.post("/signup", async (req, res) => {
+  try {
+    const author = await new User(req.body);
+    author
+      .save()
+      .then((response) => {
+        console.log(response);
+        res.status(200).json({ status: response });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (error) {
+    res.json({ status: "error" });
+  }
+});
+
+app.get("/retrieveRoles", async (req, res) => {
+  try {
+    const users = await User.find({ role: { $in: ["normal", "author"] } });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve users" });
+  }
+});
+
+
+
 app.get("/users/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);

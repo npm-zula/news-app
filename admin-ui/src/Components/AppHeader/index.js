@@ -3,6 +3,7 @@ import { BellFilled, MailOutlined, UserOutlined, SettingOutlined } from "@ant-de
 import { Badge, Drawer, Image, List, Space, Typography, Menu, Dropdown } from "antd";
 import { getComments, getOrders } from "../../API";
 import image from "./logo.png";
+import axios from 'axios';
 
 function AppHeader() {
   const [comments, setComments] = useState([]);
@@ -11,9 +12,22 @@ function AppHeader() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
   useEffect(() => {
-    getComments().then((res) => {
-      setComments(res.comments);
+    // getComments().then((res) => {
+    //   setComments(res.comments);
+    // });
+
+
+    axios.get(`http://localhost:3001/api/comments/retrieveComments`)
+    .then(response => {
+      setComments(response.data);
+      console.log(response.data)
+
+    })
+    .catch(error => {
+      console.error(error);
     });
+
+
     getOrders().then((res) => {
       setOrders(res.products);
     });
