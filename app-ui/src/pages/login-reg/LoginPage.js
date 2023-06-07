@@ -24,7 +24,7 @@ const LoginPage = () => {
         console.log("Login success:", user, token);
         document.cookie = `token=${token}; path=/`;
         // Set the state to trigger the redirect
-        navigate("/news");
+        navigate("/article");
       } else {
         const error = await response.text();
         throw new Error(error);

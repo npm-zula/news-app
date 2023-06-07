@@ -19,8 +19,6 @@ function App() {
         <Route path="/register" element={<SignupPage />} />
         <Route path="/news" element={<NewsPage></NewsPage>} />
         <Route path="/article" element={<Article></Article>} />
-        
-   
       </Routes>
     </BrowserRouter>
   );

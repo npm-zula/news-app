@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Space, Statistic, Table, Typography, message} from "antd";
 import axios from 'axios'
+import { useUserProfile } from '../../userProfile';
 
 
 const AddArticle = ({ onAddArticle, onCancel }) => {
+  const { user, fetchUserProfile } = useUserProfile();
   const [newArticle, setNewArticle] = useState({
     articleID: '',
     title: '',
@@ -11,7 +13,6 @@ const AddArticle = ({ onAddArticle, onCancel }) => {
     published: '',
     tags: '',
     authorUserName: ''
-
   });
 
   const handleInputChange = (e) => {
@@ -39,7 +40,7 @@ const AddArticle = ({ onAddArticle, onCancel }) => {
       body: newArticle.body,
       published: false,
       tags: tagsArray,
-      authorUserName: 'janedoe'
+      authorUserName: user.username
     };
 
     axios.post('http://localhost:5000/api/approval/createArticle', formData)
@@ -226,6 +227,16 @@ const UpdateArticle = ({ article, onUpdateArticle, onCancel }) => {
     <div className="update-article">
       <h2>Update Article</h2>
       <div className="form-group">
+        <label htmlFor="updateArticleTitle">Article ID:</label>
+        <input
+          type="text"
+          id="title"
+          value={updateArticle.articleID}
+          onChange={handleInputChange}
+          readOnly
+        />
+      </div>
+      <div className="form-group">
         <label htmlFor="updateArticleTitle">Title:</label>
         <input
           type="text"
@@ -238,18 +249,40 @@ const UpdateArticle = ({ article, onUpdateArticle, onCancel }) => {
         <label htmlFor="updateArticleContent">Content:</label>
         <textarea
           id="content"
-          value={updateArticle.content}
+          value={updateArticle.body}
           onChange={handleInputChange}
           rows="5"
         ></textarea>
       </div>
       <div className="form-group">
+        <label htmlFor="updateArticleAuthor">status:</label>
+        <input
+          type="text"
+          id="authorName"
+          value={"Published"}
+          onChange={handleInputChange}
+          readOnly
+        />
+      </div>
+      <div className="form-group">
+      <label htmlFor="updateArticleAuthor">Tags:</label>
+      <input
+        type="text"
+        id="authorName"
+        value={updateArticle.tags.join(', ')}
+        onChange={handleInputChange}
+      />
+      </div>
+
+      <div className="form-group">
         <label htmlFor="updateArticleAuthor">Author Name:</label>
         <input
           type="text"
           id="authorName"
-          value={updateArticle.authorName}
+          value={updateArticle.authorUserName}
           onChange={handleInputChange}
+          className="read-only-input" 
+          readOnly
         />
       </div>
       <div className="buttons">
@@ -262,6 +295,12 @@ const UpdateArticle = ({ article, onUpdateArticle, onCancel }) => {
       </div>
   
       <style jsx>{`
+
+      .read-only-input {
+        background-color: #f0f0f0; /* Set the desired background color for read-only field */
+        color: #808080; /* Set the desired text color for read-only field */
+      }
+
       .update-article {
         max-width: 600px;
         margin: 0 auto;
@@ -395,8 +434,6 @@ const ViewArticle = () => {
   const handleDeleteArticle = (articleId) => {
     const confirmed = window.confirm('Are you sure you want to delete this article?');
     if (confirmed) {
-      //setArticles((prevState) => prevState.filter((article) => article.id !== articleId));
-    
       axios.delete(`http://localhost:5000/api/articles/deleteArticle/${articleId}`)
       .then(response => {
         console.log(response.data);
@@ -413,6 +450,7 @@ const ViewArticle = () => {
   };
 
   const handleEditArticle = (article) => {
+    console.log("Before Updation",article)
     setCurrentScreen('edit');
     setSelectedArticle(article);
   };
@@ -479,7 +517,7 @@ const ViewArticle = () => {
         />
       )}
 
-      <style jsx>{`
+<style jsx>{`
 .article-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
