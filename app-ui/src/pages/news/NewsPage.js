@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import WeatherComponent from "../../components/WeatherComponent";
 // import bg from "../../imgs/background.jpg";
@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 const NewsPage = () => {
   const navigate = useNavigate();
 
+  const [user, setUser] = useState([]);
+
   useEffect(() => {
     // Add your token verification logic here
     const token = getTokenFromCookie();
@@ -18,7 +20,30 @@ const NewsPage = () => {
       // If the token is not verified, redirect to the login page
       navigate("/login");
     }
+    fetchUserProfile(token);
   }, [navigate]);
+
+  const fetchUserProfile = async (token) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/user/profile", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const user = await response.json();
+        // Handle the user data
+        console.log("User profile:", user.name);
+        setUser(user);
+      } else {
+        throw new Error("Failed to fetch user profile");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
 
   const verifyToken = (token) => {
     // Implement your token verification logic here
@@ -68,7 +93,7 @@ const NewsPage = () => {
               src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg"
               alt=""
             /> */}
-            <ProfileCard />
+            <ProfileCard name={user.name} />
           </div>
           <div className="col-span-2 h-11/12 flex row-span-1">
             {/* <img
