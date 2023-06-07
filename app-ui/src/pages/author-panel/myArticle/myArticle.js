@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { Card, Space, Statistic, Table, Typography, message} from "antd";
+import axios from 'axios'
+
 
 const AddArticle = ({ onAddArticle, onCancel }) => {
-  const [newArticle, setNewArticle] = useState({ title: '', content: '', authorName: '' });
+  const [newArticle, setNewArticle] = useState({
+    articleID: '',
+    title: '',
+    body: '',
+    published: '',
+    tags: '',
+    authorUserName: ''
+
+  });
 
   const handleInputChange = (e) => {
     setNewArticle((prevState) => ({
@@ -11,26 +22,57 @@ const AddArticle = ({ onAddArticle, onCancel }) => {
   };
 
   const handleAddArticle = () => {
-    if (newArticle.title.trim() === '' || newArticle.content.trim() === '') {
-      alert('Please enter a title and content for the article.');
+    if (
+      newArticle.title.trim() === '' ||
+      newArticle.body.trim() === '' ||
+      newArticle.tags.trim() === ''
+    ) {
+      alert('Please enter a title, content, and tags for the article.');
       return;
     }
 
-    const newArticleWithId = {
-      id: Math.floor(Math.random() * 1000),
-      ...newArticle
+    const tagsArray = newArticle.tags.split(',').map((tag) => tag.trim());
+
+    const formData = {
+      articleID: Math.floor(Math.random() * 1000),
+      title: newArticle.title,
+      body: newArticle.body,
+      published: false,
+      tags: tagsArray,
+      authorUserName: 'janedoe'
     };
 
-    onAddArticle(newArticleWithId);
+    axios.post('http://localhost:5000/api/approval/createArticle', formData)
+    .then(response => {
+      message.success("Article Added successfully.");
+      //setDataSource(response.data);
+      //setLoading(false);
+    })
+    .catch(error => {
+      console.error(error);
+    });
 
-    setNewArticle({ title: '', content: '', authorName: '' });
+    
+
+
+    //console.log('Article', newArticleWithId);
+    onAddArticle(formData);
+
+    setNewArticle({
+      articleID: '',
+      title: '',
+      body: '',
+      published: '',
+      tags: '',
+      authorUserName:''
+    });
   };
 
   return (
     <div className="add-article">
       <h2>Add New Article</h2>
       <div className="form-group">
-        <label htmlFor="newArticleTitle">Title:</label>
+        <label htmlFor="title">Title:</label>
         <input
           type="text"
           id="title"
@@ -39,23 +81,24 @@ const AddArticle = ({ onAddArticle, onCancel }) => {
         />
       </div>
       <div className="form-group">
-        <label htmlFor="newArticleContent">Content:</label>
+        <label htmlFor="body">Content:</label>
         <textarea
-          id="content"
-          value={newArticle.content}
+          id="body"
+          value={newArticle.body}
           onChange={handleInputChange}
           rows="5"
         ></textarea>
       </div>
       <div className="form-group">
-        <label htmlFor="newArticleAuthor">Author Name:</label>
+        <label htmlFor="tags">Tags:</label>
         <input
           type="text"
-          id="authorName"
-          value={newArticle.authorName}
+          id="tags"
+          value={newArticle.tags}
           onChange={handleInputChange}
         />
       </div>
+
       <div className="buttons">
         <button className="add-btn" onClick={handleAddArticle}>
           Add Article
@@ -64,9 +107,6 @@ const AddArticle = ({ onAddArticle, onCancel }) => {
           Cancel
         </button>
       </div>
-   
-
-
 
       <style jsx>{`
         .add-article {
@@ -158,6 +198,10 @@ const AddArticle = ({ onAddArticle, onCancel }) => {
     </div>
   );
 };
+
+
+
+
 
 const UpdateArticle = ({ article, onUpdateArticle, onCancel }) => {
   const [updateArticle, setUpdateArticle] = useState({ ...article });
@@ -324,48 +368,47 @@ const ViewArticle = () => {
   const [articles, setArticles] = useState([]);
   const [currentScreen, setCurrentScreen] = useState('view');
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [deletionStatus, setDeletionStatus] = useState(false)
 
   useEffect(() => {
-    // Simulating data fetching
-    const dummyData = [
-      {
-        id: 1,
-        title: 'Article 1',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        authorName: 'John Doe',
-      },
-      {
-        id: 2,
-        title: 'Article 2',
-        content: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        authorName: 'Jane Smith',
-      },
-      {
-        id: 3,
-        title: 'Article 3',
-        content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-        authorName: 'Bob Johnson',
-      },
-      {
-        id: 4,
-        title: 'Article 4',
-        content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-        authorName: 'Ehsan Rasul',
-      },
-    ];
+    //setLoading(true);
 
-    setArticles(dummyData);
-  }, []);
+    var userID = 'janedoe'
+    axios.get(`http://localhost:5000/api/articles/retrieveUserArticles/${userID}`)
+      .then(response => {
+        //console.log(response.data)
+         setArticles(response.data);
+        //setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+  }, [deletionStatus]); // Add deletionStatus as a dependency
+
 
   const handleAddArticle = (newArticle) => {
-    setArticles((prevState) => [...prevState, newArticle]);
+    //setArticles((prevState) => [...prevState, newArticle]);
     setCurrentScreen('view');
   };
 
   const handleDeleteArticle = (articleId) => {
     const confirmed = window.confirm('Are you sure you want to delete this article?');
     if (confirmed) {
-      setArticles((prevState) => prevState.filter((article) => article.id !== articleId));
+      //setArticles((prevState) => prevState.filter((article) => article.id !== articleId));
+    
+      axios.delete(`http://localhost:5000/api/articles/deleteArticle/${articleId}`)
+      .then(response => {
+        console.log(response.data);
+        //setLoading(false);
+        message.success("Article deleted successfully.");
+        setDeletionStatus(!deletionStatus); // Update deletionStatus to trigger rerender
+        //setModalVisible(false)
+      })
+      .catch(error => {
+        console.error(error);
+      });
+      
     }
   };
 
@@ -407,13 +450,13 @@ const ViewArticle = () => {
               {articles.map((article) => (
                 <div key={article.id} className="article-card">
                   <h2 className="article-title">{article.title}</h2>Content: 
-                  <p className="article-content">{article.content}</p>
-                  <p className="article-author">Author: {article.authorName}</p>
+                  <p className="article-content">{article.body}</p>
+                  <p className="article-author">Author: {article.authorUserName}</p>
                   <div className="actions">
                     <button className="edit-btn" onClick={() => handleEditArticle(article)}>
                       Edit
                     </button>
-                    <button className="delete-btn" onClick={() => handleDeleteArticle(article.id)}>
+                    <button className="delete-btn" onClick={() => handleDeleteArticle(article.articleID)}>
                       Delete
                     </button>
                   </div>

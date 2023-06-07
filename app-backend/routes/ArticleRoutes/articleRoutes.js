@@ -24,7 +24,7 @@ app.post("/approveArticle", async (req, res) => {
 });
 
 //Retrieveing all the Articles from the Database
-app.get("/retrieveArticle", async (req, res) => {
+app.get("/retrieveArticles", async (req, res) => {
   try {
     const articles = await Article.find({});
     res.json(
@@ -46,8 +46,11 @@ app.get("/retrieveArticle", async (req, res) => {
 
 //Retrieveing all the Articles from the Database
 app.get("/retrieveUserArticles/:authorID", async (req, res) => {
+  
+  console.log(req.params.authorID)
   try {
-    const articles = await Article.findAll({ authorID: req.params.authorID });
+    const articles = await Article.find({authorUserName: req.params.authorID });
+    console.log(articles)
     res.json(
       articles.map((article) => ({
         articleID: article.articleID,
@@ -60,7 +63,6 @@ app.get("/retrieveUserArticles/:authorID", async (req, res) => {
     );
   } catch (error) {
     console.error(error);
-    s;
     res.status(500).send("Error retrieving articles");
   }
 });

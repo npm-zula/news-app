@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const AuthorProfile = () => {
   const [author, setAuthor] = useState({
@@ -8,6 +9,24 @@ const AuthorProfile = () => {
     bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus nisi vitae ultricies facilisis.',
     profilePicture: null,
   });
+
+  const [deletionStatus, setDeletionStatus] = useState(false); // Track deletion status
+
+
+  useEffect(() => {
+    //setLoading(true);
+
+    axios.get('http://localhost:5000/api/Admin/retrieveRoles')
+      .then(response => {
+        setAuthor(response.data);
+        //setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, [deletionStatus]); // Add deletionStatus as a dependency
+
+
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEditProfile = () => {

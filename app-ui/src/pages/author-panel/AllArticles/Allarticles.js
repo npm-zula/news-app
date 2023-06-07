@@ -1,56 +1,130 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'
 
 const ViewArticle = () => {
   const [articles, setArticles] = useState([]);
-  const [comments, setComments] = useState({});
+  const [comments, setComments] = useState([]);
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [deletionStatus, setDeletionStatus] = useState(false); // Track deletion status
+
+  // useEffect(() => {
+  //   // // Simulating data fetching
+  //   // const dummyData = [
+  //   //   {
+  //   //     id: 1,
+  //   //     title: 'Article 1',
+  //   //     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  //   //     authorName: 'John Doe',
+  //   //   },
+  //   //   {
+  //   //     id: 2,
+  //   //     title: 'Article 2',
+  //   //     content: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+  //   //     authorName: 'Jane Smith',
+  //   //   },
+  //   //   {
+  //   //     id: 3,
+  //   //     title: 'Article 3',
+  //   //     content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+  //   //     authorName: 'Bob Johnson',
+  //   //   },
+  //   //   {
+  //   //     id: 4,
+  //   //     title: 'Article 4',
+  //   //     content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+  //   //     authorName: 'Ehsan Rasul',
+  //   //   },
+  //   // ];
+  //   //setArticles(dummyData);
+  // }, []);
+
 
   useEffect(() => {
-    // Simulating data fetching
-    const dummyData = [
-      {
-        id: 1,
-        title: 'Article 1',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        authorName: 'John Doe',
-      },
-      {
-        id: 2,
-        title: 'Article 2',
-        content: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        authorName: 'Jane Smith',
-      },
-      {
-        id: 3,
-        title: 'Article 3',
-        content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-        authorName: 'Bob Johnson',
-      },
-      {
-        id: 4,
-        title: 'Article 4',
-        content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-        authorName: 'Ehsan Rasul',
-      },
-    ];
+    //setLoading(true);
 
-    setArticles(dummyData);
-  }, []);
+    axios.get('http://localhost:5000/api/articles/retrieveArticles')
+      .then(response => {
+        //console.log(response.data)
+        setArticles(response.data);
+        //setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+      });
 
-  useEffect(() => {
-    // Simulating data fetching
-    const dummyComments = {
-      1: [
-        { authorName: 'Alice', comment: 'Great article!' },
-        { authorName: 'Bob', comment: 'I enjoyed reading this.' },
-      ],
-      2: [
-        { authorName: 'Charlie', comment: 'Well written!' },
-      ],
-    };
+      axios.get('http://localhost:5000/api/comments/retrieveComments')
+      .then(response => {
+        //console.log(response.data)
+        setComments(response.data);
+        //setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+      });
 
-    setComments(dummyComments);
-  }, []);
+      mapData();
+
+  }, [deletionStatus]); // Add deletionStatus as a dependency
+
+
+  const mapData = () => {
+    var mapped_array = []
+
+    // // Iterate over each comment and map it to the corresponding article
+    // for (const comment of comments) {
+    //   const article = articles.find((a) => a.articleID === comment.articleID);
+    //   if (article) {
+    //     mapped_array.push({ comment, article });
+    //   }
+    // }
+
+
+
+    for(const article of articles){
+
+        var mappedComments = []
+        for(const comment of comments){
+          if(article.articleID === comment.articleID){
+          mappedComments.push(comment)            
+          }
+        }
+
+
+        mapped_array.push(article, mappedComments)
+
+    }
+
+
+    //console.log("This is mapped Array",mapped_array)
+    // for(const i of mapped_array){
+
+    //   console.log(i)
+
+    // }
+    setArticles(mapped_array)
+    // // Print the mapped array
+    // for (const item of mapped_array) {
+    //   console.log(item);
+    // }
+
+  };
+
+
+
+  // useEffect(() => {
+  //   // Simulating data fetching
+  //   const dummyComments = {
+  //     1: [
+  //       { authorName: 'Alice', comment: 'Great article!' },
+  //       { authorName: 'Bob', comment: 'I enjoyed reading this.' },
+  //     ],
+  //     2: [
+  //       { authorName: 'Charlie', comment: 'Well written!' },
+  //     ],
+  //   };
+
+  //   setComments(dummyComments);
+  // }, []);
 
   const handleAddComment = (articleId, comment) => {
     setComments((prevComments) => ({
@@ -77,8 +151,8 @@ const ViewArticle = () => {
             >
               {index < 3 && <span className="top-rated-badge">Top Rated</span>}
               <h2 className="article-title">{article.title}</h2>
-              <p className="article-content">{article.content}</p>
-              <p className="article-author">Author: {article.authorName}</p>
+              <p className="article-content">{article.body}</p>
+              <p className="article-author">Author: {article.authorUserName}</p>
 
               <div className="comments-section">
                 <div className="comments-header">
@@ -98,10 +172,10 @@ const ViewArticle = () => {
                 </div>
                 {selectedArticle === article.id && comments[article.id] && (
                   <ul className="comments-list">
-                    {comments[article.id].map((comment, index) => (
+                    {article.mappedComments.map((comment, index) => (
                       <li key={index} className="comment-item">
-                        <span className="comment-author">{comment.authorName}: </span>
-                        {comment.comment}
+                        <span className="comment-author">{comment.userName}: </span>
+                        {comment.body}
                       </li>
                     ))}
                   </ul>
