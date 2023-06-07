@@ -1,8 +1,10 @@
 import {
-
   BookFilled,
   CommentOutlined,
   UserOutlined,
+  DollarCircleOutlined,
+  ShoppingCartOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { Card, Space, Statistic, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
@@ -33,6 +35,7 @@ function Dashboard() {
   const [inventory, setInventory] = useState(0);
   const [customers, setCustomers] = useState(0);
   const [revenue, setRevenue] = useState(0);
+  const [pendingArticles, setPendingArticles] = useState(0);
 
   useEffect(() => {
     getOrders().then((res) => {
@@ -45,6 +48,11 @@ function Dashboard() {
     getCustomers().then((res) => {
       setCustomers(res.total);
     });
+    // Fetch data for pendingArticles field
+    // Example:
+    // getPendingArticles().then((res) => {
+    //   setPendingArticles(res.total);
+    // });
   }, []);
 
   return (
@@ -60,6 +68,7 @@ function Dashboard() {
                 borderRadius: 20,
                 fontSize: 24,
                 padding: 8,
+                boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
               }}
             />
           }
@@ -75,6 +84,7 @@ function Dashboard() {
                 borderRadius: 20,
                 fontSize: 24,
                 padding: 8,
+                boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
               }}
             />
           }
@@ -90,30 +100,34 @@ function Dashboard() {
                 borderRadius: 20,
                 fontSize: 24,
                 padding: 8,
+                boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
               }}
             />
           }
           title={"Users"}
           value={customers}
         />
-        {/* <DashboardCard
+        
+       
+        <DashboardCard
           icon={
-            <DollarCircleOutlined
+            <TeamOutlined
               style={{
-                color: "red",
-                backgroundColor: "rgba(255,0,0,0.25)",
+                color: "cyan",
+                backgroundColor: "rgba(0,255,255,0.25)",
                 borderRadius: 20,
                 fontSize: 24,
                 padding: 8,
+                boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
               }}
             />
           }
-          title={"Revenue"}
-          value={revenue}
-        /> */}
+          title={"Team Members"}
+          value={'4'}
+        />
       </Space>
       <Space>
-        <RecentOrders />
+        {/* <RecentOrders /> */}
         <DashboardChart />
       </Space>
     </Space>
@@ -122,54 +136,26 @@ function Dashboard() {
 
 function DashboardCard({ title, value, icon }) {
   return (
-    <Card>
-      <Space direction="horizontal">
-        {icon}
-        <Statistic title={title} value={value} />
-      </Space>
+    <Card
+      style={{
+        width: 200,
+        height: 150,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 10,
+        boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+      }}
+    >
+      <div style={{ marginBottom: 10 }}>{icon}</div>
+      <Statistic title={title} value={value} />
     </Card>
-  );
-}
-function RecentOrders() {
-  const [dataSource, setDataSource] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-    getOrders().then((res) => {
-      setDataSource(res.products.splice(0, 3));
-      setLoading(false);
-    });
-  }, []);
-
-  return (
-    <>
-      <Typography.Text>Recent Articles</Typography.Text>
-      <Table
-        columns={[
-          {
-            title: "Title",
-            dataIndex: "title",
-          },
-          {
-            title: "Quantity",
-            dataIndex: "quantity",
-          },
-          {
-            title: "Price",
-            dataIndex: "discountedPrice",
-          },
-        ]}
-        loading={loading}
-        dataSource={dataSource}
-        pagination={false}
-      ></Table>
-    </>
   );
 }
 
 function DashboardChart() {
-  const [reveneuData, setReveneuData] = useState({
+  const [revenueData, setRevenueData] = useState({
     labels: [],
     datasets: [],
   });
@@ -187,14 +173,19 @@ function DashboardChart() {
         labels,
         datasets: [
           {
-            label: "Revenue",
-            data: data,
-            backgroundColor: "rgba(255, 0, 0, 1)",
+            label: "Articles",
+            data,
+            backgroundColor: "rgba(255, 0, 0, 0.6)",
+            borderColor: "rgba(255, 0, 0, 1)",
+            borderWidth: 1,
+            borderRadius: 5,
+            hoverBackgroundColor: "rgba(255, 0, 0, 0.8)",
+            hoverBorderColor: "rgba(255, 0, 0, 1)",
           },
         ],
       };
 
-      setReveneuData(dataSource);
+      setRevenueData(dataSource);
     });
   }, []);
 
@@ -206,15 +197,32 @@ function DashboardChart() {
       },
       title: {
         display: true,
-        text: "Order Revenue",
+        text: "Article Stats",
+        font: { size: 16 },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          precision: 0,
+        },
       },
     },
   };
 
   return (
-    <Card style={{ width: 500, height: 250 }}>
-      <Bar options={options} data={reveneuData} />
+    <Card
+      style={{
+        width: 500,
+        height: 250,
+        borderRadius: 10,
+        boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+      }}
+    >
+      <Bar data={revenueData} options={options} />
     </Card>
   );
 }
+
 export default Dashboard;
