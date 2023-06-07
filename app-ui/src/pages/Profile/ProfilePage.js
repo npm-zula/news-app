@@ -14,6 +14,7 @@ import SubscriptionSection from "../../components/SubscriptionSection";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("profile");
+  const [username, setUsername] = useState("");
 
   const navigate = useNavigate();
 
@@ -24,14 +25,11 @@ const ProfilePage = () => {
       // If the token is not verified, redirect to the login page
       navigate("/login");
     }
-  }, [navigate]);
+
+    fetchUserProfile(token);
+  }, [username, navigate]);
 
   const verifyToken = (token) => {
-    // Implement your token verification logic here
-    // Return true if the token is verified, false otherwise
-    // You can use a library like jsonwebtoken for token verification
-
-    // Example verification logic (replace with your actual logic)
     if (token) {
       return true;
     } else {
@@ -55,6 +53,26 @@ const ProfilePage = () => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+  };
+
+  const fetchUserProfile = async (token) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/user/profile", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const user = await response.json();
+        setUsername(user.username);
+      } else {
+        throw new Error("Failed to fetch user profile");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
   };
 
   return (
@@ -98,7 +116,7 @@ const ProfilePage = () => {
             </TabPanel>
             <TabPanel key="subscription" value="subscription">
               <h1>
-                <SubscriptionSection />
+                <SubscriptionSection username={username} />
               </h1>
             </TabPanel>
           </TabsBody>

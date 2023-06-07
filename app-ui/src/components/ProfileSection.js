@@ -118,7 +118,7 @@ const ProfileSection = () => {
               </label>
               <input
                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="grid-password"
+                id="grid-username"
                 type="text"
                 placeholder="JaneDoe123"
                 value={username}
@@ -154,7 +154,7 @@ const ProfileSection = () => {
               </label>
               <input
                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="grid-password"
+                id="grid-email"
                 type="email"
                 placeholder="JaneDoe123@gmail.com"
                 value={email}
@@ -172,7 +172,7 @@ const ProfileSection = () => {
               </label>
               <input
                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="grid-password"
+                id="grid-age"
                 type="Number"
                 placeholder="21"
                 value={age}

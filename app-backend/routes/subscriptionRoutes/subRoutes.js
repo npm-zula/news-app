@@ -42,10 +42,11 @@ router.get("/subs", authorize(["admin", "super admin"]), async (req, res) => {
 //tested with postman
 // POST /subscriptions
 router.post("/post", async (req, res) => {
-  const { username, plan, endMonth } = req.body;
+  const { username, plan } = req.body;
 
   try {
     const user = await User.findOne({ username: username });
+    const endMonth = new Date().getMonth() + 1;
 
     const subscription = await Subscription.create({
       user,
