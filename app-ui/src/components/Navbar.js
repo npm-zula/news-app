@@ -1,11 +1,12 @@
 import React from "react";
 import icon from "../imgs/profile.png";
 import { Link } from "react-router-dom";
+import { FiBell } from "react-icons/fi";
 
 const Navbar = () => {
   return (
     <div>
-      <nav className="flex flex-col md:flex-row items-center justify-between p-4 my-2 bg-white text-accent_primary">
+      <nav className="flex flex-col md:flex-row items-center justify-between p-4 bg-white text-accent_primary">
         <div className="flex items-center">
           {/* <img src={logo} alt="Logo" className="w-full h-20 mr-2" /> */}
           <div className="font-bold text-2xl ml-8 hover:text-accent_secondary cursor-pointer">
@@ -32,7 +33,10 @@ const Navbar = () => {
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </div>
-        <div className="flex">
+        <div className="flex items-center">
+          <span className="">
+            <FiBell className="h-6 w-6 text-gray-600" />
+          </span>
           <Link to="/profile" className="py-2 px-4 mx-4">
             <img src={icon} alt="Profile" className="h-8 w-8 rounded-full" />
           </Link>

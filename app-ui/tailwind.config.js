@@ -9,6 +9,9 @@ module.exports = {
         accent_primary: "#333333",
         accent_secondary: "#393E46",
       },
+      backgroundImage: {
+        "news-bg": "url('./imgs/backgroundOne.jpg')",
+      },
     },
   },
   plugins: [],
