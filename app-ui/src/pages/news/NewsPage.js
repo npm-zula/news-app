@@ -35,7 +35,7 @@ const NewsPage = () => {
       if (response.ok) {
         const user = await response.json();
         // Handle the user data
-        console.log("User profile:", user.name);
+        // console.log("User profile:", user.name);
         setUser(user);
       } else {
         throw new Error("Failed to fetch user profile");

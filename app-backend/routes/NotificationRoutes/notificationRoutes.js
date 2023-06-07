@@ -48,18 +48,29 @@ router.post("/post", async (req, res) => {
 
 // tested with postman
 // GET /notifications/:id
-router.get("/notifications/:id", async (req, res) => {
-  const { id } = req.params;
+// router.get("/:id", async (req, res) => {
+//   const id = req.params;
 
+//   try {
+//     const notification = await Notification.findById(id).populate("recipient");
+//     if (!notification) {
+//       res.status(404).json({ error: "Notification not found" });
+//     } else {
+//       res.json(notification);
+//     }
+//   } catch (err) {
+//     res.status(500).json({ error: "Failed to retrieve notification" });
+//   }
+// });
+
+// GET notifications by recipient ID
+router.get("/notification/:id", async (req, res) => {
+  const recipientId = req.params.id;
   try {
-    const notification = await Notification.findById(id).populate("recipient");
-    if (!notification) {
-      res.status(404).json({ error: "Notification not found" });
-    } else {
-      res.json(notification);
-    }
-  } catch (err) {
-    res.status(500).json({ error: "Failed to retrieve notification" });
+    const notifications = await Notification.find({ recipient: recipientId });
+    res.json(notifications);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve notifications" });
   }
 });
 

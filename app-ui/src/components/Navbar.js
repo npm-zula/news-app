@@ -2,6 +2,7 @@ import React from "react";
 import icon from "../imgs/profile.png";
 import { Link } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
+import NotificationIcon from "./NotificationIcon";
 
 const Navbar = () => {
   const handleLogout = () => {
@@ -39,7 +40,7 @@ const Navbar = () => {
         </div>
         <div className="flex items-center">
           <span className="">
-            <FiBell className="h-6 w-6 text-gray-600" />
+            <NotificationIcon />
           </span>
           <Link to="/profile" className="py-2 px-4 mx-4">
             <img src={icon} alt="Profile" className="h-8 w-8 rounded-full" />

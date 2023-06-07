@@ -18,7 +18,7 @@ const WeatherComponent = () => {
         const apiUrl = `http://localhost:5000/api/weather/${latitude}/${longitude}`;
         const response = await fetch(apiUrl);
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
 
         // Update the weather data state
         setWeatherData(data);
