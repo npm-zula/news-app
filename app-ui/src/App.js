@@ -1,24 +1,29 @@
-import logo from "./logo.svg";
 import "./App.css";
+import LandingPage from "./pages/Landing/LandingPage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/login-reg/LoginPage";
+import SignupPage from "./pages/login-reg/SignupPage";
+import NewsPage from "./pages/news/NewsPage";
+import SuperAdmin from "./pages/community-panel/superadmin";
+import User from "./pages/community-panel/user"
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          NEWSS APP
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* <LandingPage />; */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<SignupPage />} />
+        <Route path="/news" element={<NewsPage></NewsPage>} />
+        <Route path="/superadmin" element={<SuperAdmin></SuperAdmin>} />
+        <Route path="/community" element={<User></User>} />
+        
+   
+      </Routes>
+    </BrowserRouter>
   );
 }
 
