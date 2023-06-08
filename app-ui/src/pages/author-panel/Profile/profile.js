@@ -1,15 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useUserProfile } from '../../userProfile';
+
 
 const AuthorProfile = () => {
+  // const [author, setAuthor] = useState({
+  //   name: 'Ehsan rasul',
+  //   username: 'ehsanrasul0',
+  //   age: 22,
+  //   bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus nisi vitae ultricies facilisis.',
+  //   profilePicture: null,
+  // });
+
+
+
   const [author, setAuthor] = useState({
-    name: 'Ehsan rasul',
-    username: 'ehsanrasul0',
+    name: '',
+    username: '',
+    email:'',
+    password:'',
     age: 22,
-    bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus nisi vitae ultricies facilisis.',
+    role:'',
     profilePicture: null,
   });
 
+
+  const { user, fetchUserProfile } = useUserProfile();
   const [deletionStatus, setDeletionStatus] = useState(false); // Track deletion status
 
 
@@ -68,39 +84,68 @@ const AuthorProfile = () => {
               type="text"
               id="name"
               name="name"
-              value={author.name}
+              value={user.name}
               onChange={handleProfileInputChange}
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input
               type="text"
               id="username"
               name="username"
-              value={author.username}
+              value={user.username}
               onChange={handleProfileInputChange}
+              readOnly
             />
           </div>
+          
           <div className="form-group">
-            <label htmlFor="age">Age</label>
+            <label htmlFor="age">Email</label>
             <input
-              type="number"
+              type="text"
               id="age"
               name="age"
-              value={author.age}
+              value={user.email}
               onChange={handleProfileInputChange}
             />
           </div>
+
+
           <div className="form-group">
-            <label htmlFor="bio">Bio</label>
+            <label htmlFor="bio">Password</label>
+            <input
+              type='text'
+              id="bio"
+              name="bio"
+              value={user.password}
+              onChange={handleProfileInputChange}
+            ></input>
+          </div>
+
+
+          <div className="form-group">
+            <label htmlFor="bio">Age</label>
             <textarea
               id="bio"
               name="bio"
-              value={author.bio}
+              value={user.age}
               onChange={handleProfileInputChange}
             ></textarea>
           </div>
+
+          <div className="form-group">
+            <label htmlFor="bio">Role</label>
+            <textarea
+              id="bio"
+              name="bio"
+              value={user.role}
+              onChange={handleProfileInputChange}
+              readOnly
+            ></textarea>
+          </div>
+
           <div className="form-group">
             <label htmlFor="profilePicture">Profile Picture</label>
             <input
@@ -111,6 +156,8 @@ const AuthorProfile = () => {
               onChange={handleProfilePictureChange}
             />
           </div>
+
+
           <div className="form-actions">
             <button className="save-profile-btn" onClick={handleSaveProfile}>
               Save
@@ -120,20 +167,22 @@ const AuthorProfile = () => {
             </button>
           </div>
         </div>
-      ) : (
+      ) : user && (
         <div className="profile-info">
           <div className="profile-picture">
             {author.profilePicture ? (
-              <img src={author.profilePicture} alt="Author Avatar" />
+              <img src="C:/Users/Ehsan Rasul/Downloads/prof.jpeg" alt="Author Avatar" />
             ) : (
               <div className="default-avatar">No Picture</div>
             )}
           </div>
           <div className="profile-details">
-            <h2 className="profile-name">{author.name}</h2>
-            <p className="profile-username">@{author.username}</p>
-            <p className="profile-age">Age: {author.age}</p>
-            <p className="profile-bio">{author.bio}</p>
+            <h2 className="profile-name">{user.name}</h2>
+            <p className="profile-username">@{user.username}</p>
+            <p className="profile-age">Email:{user.email}</p>
+            <p className="profile-age">Password: {user.password}</p>
+            <p className="profile-bio">{user.age}</p>
+            <p className="profile-bio">{user.role}</p>
           </div>
           <button className="edit-profile-btn" onClick={handleEditProfile}>
             Edit Profile
