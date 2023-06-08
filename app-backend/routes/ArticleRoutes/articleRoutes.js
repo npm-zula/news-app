@@ -47,9 +47,8 @@ app.get("/retrieveArticles", async (req, res) => {
 //Retrieveing all the Articles from the Database
 app.get("/retrieveUserArticles/:authorID", async (req, res) => {
   
-  console.log(req.params.authorID)
   try {
-    const articles = await Article.find({authorUserName: req.params.authorID });
+    const articles = await Article.find({authorUserName: req.params.authorID});
     console.log(articles)
     res.json(
       articles.map((article) => ({
@@ -67,28 +66,30 @@ app.get("/retrieveUserArticles/:authorID", async (req, res) => {
   }
 });
 
-//Updating the Articles
-app.put("/editArticle", async (req, res) => {
-  try {
-    findRecord = await Article.findOne({ articleID: req.body.articleID });
-    if (findRecord) {
-      const updatedArticle = await Article.findByIdAndUpdate(findRecord._id, {
-        articleID: req.body.articleID,
-        title: req.body.title,
-        body: req.body.body,
-        published: req.body.published,
-        tags: req.body.tags,
-        authorUserName: req.body.authorUserName,
-      });
-      res.json(updatedArticle);
-    } else {
-      res.status(404).send("No Such Article Found");
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error updating Comment");
-  }
-});
+// //Updating the Articles
+// app.put("/editArticle", async (req, res) => {
+//   try {
+//     findRecord = await Article.findOne({ articleID: req.body.articleID });
+//     if (findRecord) {
+//       const updatedArticle = await Article.findByIdAndUpdate(findRecord._id, {
+//         articleID: req.body.articleID,
+//         title: req.body.title,
+//         body: req.body.body,
+//         published: req.body.published,
+//         tags: req.body.tags,
+//         authorUserName: req.body.authorUserName,
+//       });
+//       res.json(updatedArticle);
+//     } else {
+//       res.status(404).send("No Such Article Found");
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Error updating Comment");
+//   }
+// });
+
+
 
 //editing information of the Article other than IDs etc
 app.put("/editArticle", async (req, res) => {

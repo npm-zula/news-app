@@ -24,9 +24,9 @@ app.get("/users", authorize(["admin"]), async (req, res) => {
   }
 });
 
-app.get("/users/:id", authorize(["admin"]), async (req, res) => {
+app.get("/users/:email", authorize(["admin"]), async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById({email: req.params.email});
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -36,16 +36,39 @@ app.get("/users/:id", authorize(["admin"]), async (req, res) => {
   }
 });
 
-app.put("/users/:id", authorize(["admin"]), async (req, res) => {
+// app.put("/users/:id", authorize(["admin"]), async (req, res) => {
+  app.put("/users/:username" ,async (req, res) => {
+    
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+    const findRecord = req.body._id;
+    if (true) {
+      const updatedRecord = await User.findByIdAndUpdate(findRecord, {
+        name: req.body.name,
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        age: req.body.age,
+        role: req.body.role
+      });
+      res.json(updatedRecord);
     }
-    res.json(user);
-  } catch (error) {
+    else {
+      res.status(404).send("Article Not Found");
+    }
+  }
+
+  // try {
+    
+  //   const user = await User.findByIdAndUpdate(req.params.username, req.body, {
+  //     new: true,
+  //   });
+  //   console.log("Did i Get here")
+  //   if (!user) {
+  //     return res.status(404).json({ error: "User not found" });
+  //   }
+  //   res.json(user);
+  // }
+   catch (error) {
     res.status(500).json({ error: "Failed to update the user" });
   }
 });

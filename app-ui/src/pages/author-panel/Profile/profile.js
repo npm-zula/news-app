@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useUserProfile } from '../../userProfile';
+import { Card, Space, Statistic, Table, Typography, message} from "antd";
 
 
 const AuthorProfile = () => {
@@ -19,37 +20,43 @@ const AuthorProfile = () => {
     username: '',
     email:'',
     password:'',
-    age: 22,
+    age: '',
     role:'',
     profilePicture: null,
   });
 
 
-  const { user, fetchUserProfile } = useUserProfile();
+  const {user, fetchUserProfile} = useUserProfile();
   const [deletionStatus, setDeletionStatus] = useState(false); // Track deletion status
+  // const [userr, setUserr] = useState()
+
+  // useEffect(() => {
 
 
-  useEffect(() => {
-    //setLoading(true);
-
-    axios.get('http://localhost:5000/api/Admin/retrieveRoles')
-      .then(response => {
-        setAuthor(response.data);
-        //setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, [deletionStatus]); // Add deletionStatus as a dependency
+  // }, [user]); // Add deletionStatus as a dependency
 
 
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEditProfile = () => {
+    setAuthor(user)
     setIsEditing(true);
   };
 
   const handleSaveProfile = () => {
+    var username = author.username;
+    console.log(author)
+    axios.put(`http://localhost:5000/api/Admin/users/${username}`, author)
+      .then(response => {
+        
+        message.success("Profile Updated Successfully")
+        //setAuthor(response.data);
+        //setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
     setIsEditing(false);
     // Save the updated author profile to the server or perform any necessary action
   };
@@ -58,13 +65,22 @@ const AuthorProfile = () => {
     setIsEditing(false);
   };
 
-  const handleProfileInputChange = (event) => {
-    const { name, value } = event.target;
-    setAuthor((prevAuthor) => ({
-      ...prevAuthor,
+  // const handleProfileInputChange = (event) => {
+  //   const { name, value} = event.target;
+  //   setAuthor((prevAuthor) => ({
+  //     ...prevAuthor,
+  //     [name]: value,
+  //   }));
+  // };
+
+  const handleProfileInputChange = (e) => {
+    const { name, value } = e.target;
+    setAuthor((prevUser) => ({
+      ...prevUser,
       [name]: value,
     }));
   };
+  
 
   const handleProfilePictureChange = (event) => {
     const file = event.target.files[0];
@@ -84,7 +100,7 @@ const AuthorProfile = () => {
               type="text"
               id="name"
               name="name"
-              value={user.name}
+              value={author.name}
               onChange={handleProfileInputChange}
             />
           </div>
@@ -95,7 +111,7 @@ const AuthorProfile = () => {
               type="text"
               id="username"
               name="username"
-              value={user.username}
+              value={author.username}
               onChange={handleProfileInputChange}
               readOnly
             />
@@ -105,32 +121,31 @@ const AuthorProfile = () => {
             <label htmlFor="age">Email</label>
             <input
               type="text"
-              id="age"
-              name="age"
-              value={user.email}
+              id="email"
+              name="email"
+              value={author.email}
               onChange={handleProfileInputChange}
+              readOnly
             />
           </div>
-
 
           <div className="form-group">
             <label htmlFor="bio">Password</label>
             <input
               type='text'
-              id="bio"
-              name="bio"
-              value={user.password}
+              id="password"
+              name="password"
+              value={author.password}
               onChange={handleProfileInputChange}
             ></input>
           </div>
 
-
           <div className="form-group">
             <label htmlFor="bio">Age</label>
             <textarea
-              id="bio"
-              name="bio"
-              value={user.age}
+              id="age"
+              name="age"
+              value={author.age}
               onChange={handleProfileInputChange}
             ></textarea>
           </div>
@@ -138,9 +153,9 @@ const AuthorProfile = () => {
           <div className="form-group">
             <label htmlFor="bio">Role</label>
             <textarea
-              id="bio"
-              name="bio"
-              value={user.role}
+              id="role"
+              name="role"
+              value={author.role}
               onChange={handleProfileInputChange}
               readOnly
             ></textarea>
@@ -157,7 +172,6 @@ const AuthorProfile = () => {
             />
           </div>
 
-
           <div className="form-actions">
             <button className="save-profile-btn" onClick={handleSaveProfile}>
               Save
@@ -167,7 +181,7 @@ const AuthorProfile = () => {
             </button>
           </div>
         </div>
-      ) : user && (
+      ) : (user && (
         <div className="profile-info">
           <div className="profile-picture">
             {author.profilePicture ? (
@@ -188,7 +202,7 @@ const AuthorProfile = () => {
             Edit Profile
           </button>
         </div>
-      )}
+      ))}
       <style jsx>{`
         .author-profile {
             max-width: 600px;

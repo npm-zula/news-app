@@ -85,9 +85,9 @@ export const useUserProfile = () => {
         return cookie.substring("token=".length, cookie.length);
       }
     }
-
+    
     return null;
   };
 
-  return { user, fetchUserProfile };
+  return { user, fetchUserProfile, getTokenFromCookie};
 };

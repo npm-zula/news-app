@@ -9,7 +9,7 @@ const Article = () => {
     <>
     <Header/>
     <div>
-      <NavBar />
+    <NavBar />
       
     </div>
     <Footer/>

@@ -1,5 +1,4 @@
 import {
-
     BookFilled,
     CommentOutlined,
     UserOutlined,
@@ -7,7 +6,10 @@ import {
   import { Card, Space, Statistic, Table, Typography } from "antd";
   import { useEffect, useState } from "react";
   import { getCustomers, getInventory, getOrders, getRevenue } from "../Api";
+  import axios from 'axios'
+  import { useUserProfile } from '../../userProfile';
   
+
   import {
     Chart as ChartJS,
     CategoryScale,
@@ -33,23 +35,125 @@ import {
     const [inventory, setInventory] = useState(0);
     const [customers, setCustomers] = useState(0);
     const [revenue, setRevenue] = useState(0);
+    const [data, setData] = useState([]);
+    const[articles, setArticles] = useState([null])
+    const[comments, setComments] = useState([null])
+    
+
+    const [user, setUser] = useState(null);
+
+
+ useEffect(() => {
+    const token = getTokenFromCookie();
   
-    useEffect(() => {
-      getOrders().then((res) => {
-        setOrders(res.total);
-        setRevenue(res.discountedTotal);
+    fetchUserProfile(token)
+      .then((user) => {
+        setUser(user);
+        
+      //var username = user.username;
+      console.log("userName", user.username)
+      var userID = user.username;
+      axios.get(`http://localhost:5000/api/articles/retrieveUserArticles/${userID}`)
+        .then(response => {
+           setArticles(response.data);
+           console.log("response", response.data)
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+      //var username = user.username;
+      axios
+        .get('http://localhost:5000/api/comments/retrieveComments')
+        .then((response) => {
+             setComments(response.data);
+             console.log("Comments",response.data)
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+
+    mapData();
+
+  }, []);
+  
+  
+
+  const mapData = () => {
+    var mapped_data = []
+    var commentCount = 0;
+    
+    for (const article of articles) {
+        var mapped_comment = [];
+        for (const comment of comments) {
+          if (article && comment && article.articleID === comment.articleID) {
+            mapped_comment.push(comment);
+            commentCount++;
+          }
+        }
+        mapped_data.push(article, mapped_comment);
+      }
+    
+
+    for(const i of mapped_data){
+
+        console.log("Data",i);
+
+    }
+
+    setOrders(articles.length)
+    setInventory(commentCount)
+    //console.log("comments",commentCount)
+
+}
+
+
+
+
+  const fetchUserProfile = async (token) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/user/profile", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-      getInventory().then((res) => {
-        setInventory(res.total);
-      });
-      getCustomers().then((res) => {
-        setCustomers(res.total);
-      });
-    }, []);
+  
+      if (response.ok) {
+        const user = await response.json();
+        //console.log(user);
+        return user;
+      } else {
+        throw new Error("Failed to fetch user profile");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+  
+  const getTokenFromCookie = () => {
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+
+      if (cookie.startsWith("token=")) {
+        return cookie.substring("token=".length, cookie.length);
+      }
+    }
+    
+    return null;
+  };
+
   
     return (
       <Space size={20} direction="vertical">
-        <Typography.Title level={4}>Dashboard</Typography.Title>
+        <Typography.Title level={4}>Analytics</Typography.Title>
         <Space direction="horizontal">
           <DashboardCard
             icon={

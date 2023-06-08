@@ -5,7 +5,7 @@ import Profile from '../Profile/profile';
 import Dashboard from '../Dashboard/dashboard';
 
 const Navbar = () => {
-  const [activeMenu, setActiveMenu] = useState('articlePost');
+  const [activeMenu, setActiveMenu] = useState('Analytics');
 
   const handleMenuClick = (menu) => {
     setActiveMenu(menu);
@@ -21,7 +21,7 @@ const Navbar = () => {
         return <Profile />;
     }
 
-    else if (activeMenu === 'Dashboard') {
+    else if (activeMenu === 'Analytics') {
         return <Dashboard />;
     }
   };
@@ -30,10 +30,10 @@ const Navbar = () => {
     <div className="side-menu">
       <div className="menu">
       <div
-          className={`menu-item ${activeMenu === 'Dashboard' ? 'active' : ''}`}
-          onClick={() => handleMenuClick('Dashboard')}
+          className={`menu-item ${activeMenu === 'Analytics' ? 'active' : ''}`}
+          onClick={() => handleMenuClick('Analytics')}
         >
-         Dashboard
+         Analytics
         </div>
         <div
           className={`menu-item ${activeMenu === 'articlePost' ? 'active' : ''}`}

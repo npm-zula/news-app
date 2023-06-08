@@ -220,6 +220,16 @@ const UpdateArticle = ({ article, onUpdateArticle, onCancel }) => {
       return;
     }
 
+    axios.put(`http://localhost:5000/api/articles/editArticle`, updateArticle)
+    .then(response => {
+      message.success("Article Updated Successfully")
+      //setAuthor(response.data);
+      //setLoading(false);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
     onUpdateArticle(updateArticle);
   };
 
@@ -284,6 +294,7 @@ const UpdateArticle = ({ article, onUpdateArticle, onCancel }) => {
           className="read-only-input" 
           readOnly
         />
+
       </div>
       <div className="buttons">
         <button className="save-btn" onClick={handleSaveUpdateArticle}>
@@ -409,22 +420,83 @@ const ViewArticle = () => {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [deletionStatus, setDeletionStatus] = useState(false)
 
+  // useEffect(() => {
+  //   //setLoading(true);
+
+  //   var userID = user.username;
+  //   axios.get(`http://localhost:5000/api/articles/retrieveUserArticles/${userID}`)
+  //     .then(response => {
+  //       //console.log(response.data)
+  //        setArticles(response.data);
+  //       //setLoading(false);
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+
+  // }, [deletionStatus]); // Add deletionStatus as a dependency
+
+
+
+  const [user, setUser] = useState(null);
+
+
   useEffect(() => {
-    //setLoading(true);
+     const token = getTokenFromCookie();
+   
+     fetchUserProfile(token)
+       .then((user) => {
+         setUser(user);
+         var userID = user.username;
+         axios.get(`http://localhost:5000/api/articles/retrieveUserArticles/${userID}`)
+           .then(response => {
+              setArticles(response.data);
+           })
+           .catch(error => {
+             console.error(error);
+           });
 
-    var userID = 'janedoe'
-    axios.get(`http://localhost:5000/api/articles/retrieveUserArticles/${userID}`)
-      .then(response => {
-        //console.log(response.data)
-         setArticles(response.data);
-        //setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
+     })
+     .catch((error) => {
+       console.error(error);
+     });
+ 
+   }, [deletionStatus]);   
+
+   const fetchUserProfile = async (token) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/user/profile", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+  
+      if (response.ok) {
+        const user = await response.json();
+        //console.log(user);
+        return user;
+      } else {
+        throw new Error("Failed to fetch user profile");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+  
+  const getTokenFromCookie = () => {
+    const cookies = document.cookie.split(";");
 
-  }, [deletionStatus]); // Add deletionStatus as a dependency
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
 
+      if (cookie.startsWith("token=")) {
+        return cookie.substring("token=".length, cookie.length);
+      }
+    }
+    
+    return null;
+  };
 
   const handleAddArticle = (newArticle) => {
     //setArticles((prevState) => [...prevState, newArticle]);
