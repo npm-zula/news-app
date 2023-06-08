@@ -6,6 +6,7 @@ import LoginPage from "./pages/login-reg/LoginPage";
 import SignupPage from "./pages/login-reg/SignupPage";
 import NewsPage from "./pages/news/NewsPage";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import SearchPage from "./pages/searchPage/SearchPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/register" element={<SignupPage />} />
         <Route path="/news" element={<NewsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/search" element={<SearchPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -16,7 +16,7 @@ const NotificationIcon = () => {
     if (user) {
       fetchNotification();
     }
-  }, [user]);
+  });
 
   const fetchNotification = async () => {
     try {
